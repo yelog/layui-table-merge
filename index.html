@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>layui表格列合并</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="keywords" content="layui,table,合并,列合并,行合并,rowspan,colspan,表格合并,merge">
+    <meta name="description" content="layui table 列合并 自动列合并,相同值合并">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" href="layui/css/layui.css" media="all"/>
+    <style>
+        .site-h1 {
+            margin: 0 0 20px 20px;
+            line-height: 60px;
+            padding-bottom: 10px;
+            color: #393D49;
+            border-bottom: 1px solid #eee;
+            font-size: 28px;
+            font-weight: 300;
+        }
+         .layui-table tbody tr:hover, .layui-table-hover {
+            background-color: initial;
+        }
+        .site-demo-code {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 580px;
+            border: none;
+            padding: 10px;
+            resize: none;
+            font-size: 12px;
+            background-color: #F7FBFF;
+            color: #881280;
+            font-family: Courier New;
+        }
+        b {
+            color: red;
+        }
+        .little-code {
+            font-size: 12px;
+            background-color: #F7FBFF;
+            color: #881280;
+            font-family: Courier New;
+        }
+    </style>
+</head>
+<body >
+<h1 class="site-h1">layui表格列合并</h1>
+<blockquote class="layui-elem-quote">
+    扩展了layui table，可以相同值列合并 。当前使用的layui版本：<b>2.4.5</b>
+</blockquote>
+
+<fieldset class="layui-elem-field layui-field-title site-title">
+    <legend><a name="use">快速上手</a></legend>
+</fieldset>
+<div class="layui-tab layui-tab-brief" lay-filter="change">
+    <ul class="layui-tab-title">
+        <li class="layui-this">自动列合并表格</li>
+        <li>原始表格</li>
+        <li>查看代码</li>
+    </ul>
+    <div class="layui-tab-content" style="padding: 0px">
+        <div class="layui-tab-item layui-show">
+            <table id="mergeTable"></table>
+        </div>
+        <div class="layui-tab-item">
+            <table id="originTable"></table>
+        </div>
+        <div class="layui-tab-item">
+            <pre class="layui-border-box site-demo-text site-demo-code" id="LAY_democode" spellcheck="false" readonly="">
+table.render({
+    elem: '#mergeTable'
+    ,height: 550
+    ,url: 'data.json'
+    ,limit: 30
+    ,page: true
+    ,cols: [[
+        {type: 'checkbox', fixed: 'left'}
+        ,{field:'poetry', title:'诗词', width:188, fixed: 'left'}
+        ,{field:'name', <b>merge: true,</b> title:'诗人', width:100, fixed: 'left'}              // 根据 <b>当前列</b> <b>相同值</b> 的自动合并
+        ,{field:'type', <b>merge: ['name','type'],</b> title:'类型', width:100, fixed: 'left'}   // 根据 <b>name值</b> 分组后，再以 <b>type值</b> 相同的合并对应行
+        ,{field:'type', <b>merge: true,</b> title:'类型', width:100}                             // 根据 <b>当前列</b> <b>相同值</b> 的自动合并
+        ,{field:'dynasty', title:'朝代', <b>merge: ['name', 'type'],</b> width:150}              // 根据 <b>name值</b> 分组后，再以 <b>type值</b> 相同的自动合并
+        ,{field:'dynasty', title:'朝代', <b>merge: 'name',</b> width:150}                        // 根据 <b>name值</b> 相同的自动合并
+        ,{field:'dynasty', title:'朝代', <b>merge: true,</b> width:150}                          // 根据 <b>当前列</b> <b>相同值</b> 的自动合并
+        ,{field:'sentences', title:'名句', width:400}
+        ,{field:'sentences', title:'名句', width:400}
+        ,{field:'sentences', title:'名句', width:400}
+        ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+    ]]
+    ,done: function(){
+        <b>tableMerge.render(this)</b>
+    }
+});
+            </pre>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<fieldset class="layui-elem-field layui-field-title site-title">
+    <legend><a name="use">如何使用</a></legend>
+</fieldset>
+<blockquote class="layui-elem-quote layui-quote-nm">
+     1、将模块 tableMerge.js 引入项目中：
+    <pre class="little-code">
+// 自定义模块
+layui.config({
+    base: 'module/'
+}).extend({
+    tableMerge: 'tableMerge'
+});
+    </pre>
+    2、点击<b>查看代码</b>有使用示例，当然也可下载源码查看<a target="_blank" style="color: #1e9fff" href="https://github.com/yelog/layui-table-merge">点我到达项目地址</a><br>
+
+</blockquote>
+
+<script type="text/javascript" src="layui/layui.js"></script>
+<script>
+
+    // 自定义模块
+    layui.config({
+        base: 'module/'
+    }).extend({
+        tableMerge: 'tableMerge'
+    });
+
+    layui.use(['table','element','tableMerge'], function () {
+        var table = layui.table,
+            tableMerge = layui.tableMerge;
+
+        /**
+         * 自动合并表格
+         */
+        table.render({
+            elem: '#mergeTable'
+            ,height: 550
+            ,url: 'data.json'
+            ,limit: 30
+            ,page: true
+            ,cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                ,{field:'poetry', title:'诗词', width:188, fixed: 'left'}
+                ,{field:'name', merge: true, title:'诗人', width:100, fixed: 'left'}              // 根据 当前列 相同值 的自动合并
+                ,{field:'type', merge: ['name','type'], title:'类型', width:100, fixed: 'left'}   // 根据 name 分组后，再以 type值 相同的合并对应行
+                ,{field:'type', merge: true, title:'类型', width:100}                             // 根据 当前列 相同值 的自动合并
+                ,{field:'dynasty', title:'朝代', merge: ['name', 'type'], width:150}              // 根据 name 分组后，再以 type值 相同的自动合并
+                ,{field:'dynasty', title:'朝代', merge: 'name', width:150}                        // 根据 name值 相同的自动合并
+                ,{field:'dynasty', title:'朝代', merge: true, width:150}                          // 根据 当前列 相同值 的自动合并
+                ,{field:'sentences', title:'名句', width:400}
+                ,{field:'sentences', title:'名句', width:400}
+                ,{field:'sentences', title:'名句', width:400}
+                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+            ]]
+            ,done: function () {
+                tableMerge.render(this)
+            }
+        });
+
+        layui.element.on('tab(change)', function(data){
+            if (data.index == 1 && layui.$('#originTable').siblings().length==0) { //第一次切换时加载
+                /**
+                 * 原始表格
+                 */
+                table.render({
+                    elem: '#originTable'
+                    ,height: 550
+                    ,url: 'data.json'
+                    ,limit: 30
+                    ,page: true
+                    ,cols: [[
+                        {type: 'checkbox', fixed: 'left'}
+                        ,{field:'poetry', title:'诗词', width:188, fixed: 'left'}
+                        ,{field:'name', title:'诗人', width:100, fixed: 'left'}
+                        ,{field:'type', title:'类型', width:100, fixed: 'left'}
+                        ,{field:'type', title:'类型', width:100}
+                        ,{field:'dynasty', title:'朝代', width:150}
+                        ,{field:'dynasty', title:'朝代', width:150}
+                        ,{field:'dynasty', title:'朝代', width:150}
+                        ,{field:'sentences', title:'名句', width:400}
+                        ,{field:'sentences', title:'名句', width:400}
+                        ,{field:'sentences', title:'名句', width:400}
+                        ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+                    ]]
+                });
+            }
+        });
+    })
+</script>
+<a target="_blank" href="https://github.com/yelog/layui-table-merge"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+</body>
+</html>
