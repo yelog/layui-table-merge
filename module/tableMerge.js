@@ -15,7 +15,7 @@ layui.define(['table'], function (exports) {
          * @param myTable
          */
         render: function (myTable) {
-            var tableBox = $('#'+myTable.id).next().children('.layui-table-box'),
+            var tableBox = $(myTable.elem).next().children('.layui-table-box'),
                 $main = $(tableBox.children('.layui-table-body').children('table').children('tbody').children('tr').toArray().reverse()),
                 $fixLeft = $(tableBox.children('.layui-table-fixed-l').children('.layui-table-body').children('table').children('tbody').children('tr').toArray().reverse()),
                 $fixRight = $(tableBox.children('.layui-table-fixed-r').children('.layui-table-body').children('table').children('tbody').children('tr').toArray().reverse()),
